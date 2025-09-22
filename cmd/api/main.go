@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	_ "rest-api/docs"
 	"rest-api/internal/database"
 	"rest-api/internal/env"
 
@@ -11,22 +12,30 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type application struct{
-	port int
+//  @title GO Gin Rest API
+//  @version 1.0
+//  @description A rest API in GO using Gin framework
+//  @securityDefinitions.apikey BearerAuth
+//  @in header
+//  @name Authorization
+//  @description Enter your bearer token in the format **Bearer &lt;token&gt;**
+
+type application struct {
+	port      int
 	jwtSecret string
-	model database.Models
+	model     database.Models
 }
 
-func main(){
+func main() {
 	db, err := sql.Open("sqlite3", "../../data.db")
 	if err != nil {
 		log.Fatal(err)
 	}
-	
+
 	// ADD THESE DEBUG LINES:
 	fmt.Printf("DEBUG: Database connection opened\n")
 	fmt.Printf("DEBUG: Database file: ./data.db\n")
-	
+
 	// Test the connection and check if users table exists
 	var tableName string
 	err = db.QueryRow("SELECT name FROM sqlite_master WHERE type='table' AND name='users'").Scan(&tableName)
@@ -35,19 +44,19 @@ func main(){
 	} else {
 		fmt.Printf("DEBUG: SUCCESS - Users table exists: %s\n", tableName)
 	}
-	if err!=nil{
+	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
 
-	models:=database.NewModels(db)
+	models := database.NewModels(db)
 
-	app:=&application{
-		port: env.GetEnvInt("PORT",3030),
-		jwtSecret: env.GetEnvString("JWT_SECRET","some-secret1234"),
-		model: models,
+	app := &application{
+		port:      env.GetEnvInt("PORT", 3030),
+		jwtSecret: env.GetEnvString("JWT_SECRET", "some-secret1234"),
+		model:     models,
 	}
-	if err:=app.Serve();err!=nil{
+	if err := app.Serve(); err != nil {
 		log.Fatal(err)
 	}
 }

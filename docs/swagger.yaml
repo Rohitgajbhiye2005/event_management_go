@@ -1,0 +1,13 @@
+info:
+  contact: {}
+  description: A rest API in GO using Gin framework
+  title: GO Gin Rest API
+  version: "1.0"
+paths: {}
+securityDefinitions:
+  BearerAuth:
+    description: Enter your bearer token in the format **Bearer &lt;token&gt;**
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

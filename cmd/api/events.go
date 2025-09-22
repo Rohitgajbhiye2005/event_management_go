@@ -30,6 +30,17 @@ func (app *application)createEvent(c *gin.Context){
 
 }
 
+// getEvents return all events
+//
+// @summary Returns all events
+// @Description Returns all events
+// @Tags Events
+// @Accept json
+// @Produce json
+// @Success 200 {object} []database.Event
+// @Router /api/v1/events [get]
+
+
 func (app *application)getAllEvent(c *gin.Context){
 	events,err:=app.model.Events.GetAll()
 	if err!=nil{
